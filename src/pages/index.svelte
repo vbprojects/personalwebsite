@@ -13,10 +13,10 @@
 		<div id="right">
 			<!-- <div id="spacer2"></div> -->
 			<div id="buttons">
-                <div><a href="www.Linkdin.com"><p>Linkdin</p></a></div>
-                <div><a href="www.Linkdin.com"><p>Github</p></a></div>
-                <div><a href="www.Linkdin.com"><p>Kagggle</p></a></div>
-                <div><a href="www.Linkdin.com"><p>Gallery</p></a></div>
+                <div><a href="https://www.linkedin.com/in/vbhat01/"><p>Linkdin</p></a></div>
+                <div><a href="https://github.com/vbprojects"><p>Github</p></a></div>
+                <div><a href="https://www.kaggle.com/varunb01/"><p>Kaggle</p></a></div>
+                <div><a href={$url("./gallery")}><p>Gallery</p></a></div>
             </div>
 		</div>
 	</div>
@@ -53,13 +53,13 @@
         height: 100%;
     }
     #buttons div{ /* Some padding */
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        /* box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); */
         height: 95%;
         width: 95%;
         vertical-align: middle;
     }
     #buttons div{ /* Some padding */
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        /* box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); */
         height: 95%;
         width: 95%;
         vertical-align: middle;
@@ -158,14 +158,16 @@
 </svelte:head>
 
 
+
 <script>
     import { metatags } from '@roxi/routify'
-    
-    metatags.title = 'My Routify app'
+    import { url } from '@roxi/routify'
+    metatags.title = 'Home Page'
     metatags.description = 'Description coming soon...'
 	import * as d3 from "d3"
 	import * as R from "ramda"
 	import {Delaunay} from "d3-delaunay"
+    import { beforeUrlChange } from "@roxi/routify"
 	const n = 200;
 	const M = 4_000;
 	const arr = () => R.map((x) => (Math.random()*1.1 - .2 * 1.1) * M, R.range(0, n))
@@ -212,15 +214,15 @@
 			.style("position", "fixed")
 			.attr("class", "tri")
 	}, tris)
-	R.map((t) => {
-		const p = R.join(' ', R.map((tt) => R.join(',', tt), t[0]))	
-		csvg.append("polygon")
-			.attr("points", p)
-			// .style("fill", "blue")
-			.style("position", "fixed")	
-			.attr("class", "vor")
-			.style("fill", "rgba(10, 10, 10," + t[1] / vor.length + ')')
-	}, R.zip(vor, R.range(0, vor.length)))
+	// R.map((t) => {
+	// 	const p = R.join(' ', R.map((tt) => R.join(',', tt), t[0]))	
+	// 	csvg.append("polygon")
+	// 		.attr("points", p)
+	// 		// .style("fill", "blue")
+	// 		.style("position", "fixed")	
+	// 		.attr("class", "vor")
+	// 		.style("fill", "rgba(10, 10, 10," + t[1] / vor.length + ')')
+	// }, R.zip(vor, R.range(0, vor.length)))
 	const easel1 = d3.easeElasticIn//d3.easeSinIn
 	const easel2 = d3.easeSinOut
 	const polygons = d3.select("svg").selectAll(".tri")
@@ -238,5 +240,9 @@
 		sleep(800).then(breatheout)
 	}
 	breathe()
-	setInterval(breathe, 2000);
+	let loop = setInterval(breathe, 2000);
+    $beforeUrlChange((event, route) => {
+        clearInterval(loop)
+        return true
+    })
 </script>
